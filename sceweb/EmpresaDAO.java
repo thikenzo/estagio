@@ -2,6 +2,8 @@ package br.sceweb.modelo;
 
 import org.apache.log4j.Logger;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import br.sceweb.servico.FabricadeConexoes;
 
 
@@ -33,3 +35,20 @@ public class EmpresaDAO {
 		return codigoRetorno;
 	}
 }
+
+
+public int excluir (String cnpj){
+	PreparedStatement ps;
+	int codigoRetorno = 0;
+	try (Connection conn = new FabricadeConexoes().getConnection()){
+		ps = (PreparedStatement) conn.prepareStatement("delete from empresa where cnpj = ?");
+		ps.setString(1,cnpj);
+		codigoRetorno = ps.executeUpdate();
+	}catch (SQLException e){
+		throw new RuntimeException(e);
+				
+	}
+	return codigoRetorno;	
+}
+}
+
